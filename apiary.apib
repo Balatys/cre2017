@@ -1,0 +1,452 @@
+FORMAT: 1A
+
+# CRE2017 API
+These REST web services are exposed by CRE2017 in the intranet of the European Parliament. 
+
+They allow other systems of the European Parliament to retrieve information from CRE2017.
+
+## Group Events
+
+### Event [/event/{eventIdentifier}]
+
+- Parameters
+    - eventIdentifier (string, required) - The reference of the event in CRE2017
+
+- Attributes (object)
+    - eventIdentifier (string, required) - The identifier of the event in CRE2017
+    - date: `2017-03-21` (string, required) - The date of the event
+    - place: STR (city) - The place where the event is held
+    - type: PLENARY (eventType, required) - The type of event
+
+#### GET
+Returns the information about the desired event
+
+- Response 200 (application/json)
+    - Attributes (Event)
+- Response 400 (application/json)
+Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.
+    - Attributes (string)
+- Response 401 (application/json)
+Indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+    - Attributes (string)
+- Response 404 (application/json)
+Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+    - Attributes (string)
+- Response 500 (application/json)
+Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+    - Attributes (string)
+
+## Group Debates
+
+### Debate [/debate/{debateIdentifier}]
+
+- Parameters
+    - debateIdentifier (string, required) - The reference of the debate in CRE2017
+
+- Attributes (object)
+    - eventIdentifier (string, required) - The identifier of the event in CRE2017 to which the debate belongs to
+    - debateIdentifier (string, required) - The identifier of the debate in CRE2017
+    - startTime: `2017-03-21T16:23:51,004` (string) - The start time of the debate
+    - endTime: `2017-03-22T00:25:16,687` (string) - The end time of the debate
+    - videoDeliverable: true (boolean) - If set to true, indicates that the video must be published
+    - videoLink (string) - The link to the video file in Europarl
+    - type (debateType) - The type of debate
+    - One Of
+        - parentDebateIds (string) - `The identifier of the parent debate. Information available only for sub-debates.`
+        - childrenDebateIds (array[string]) - `The list of sub-debates identifiers. Information available only for debates.`
+    - title (array[translatedText]) - The title of the debate in all available translations
+    - chairs (array[person]) - The list of persons holding the chair during the debate
+
+#### GET
+Returns the information about the desired debate
+
+- Response 200 (application/json)
+    - Attributes (Debate)
+- Response 400 (application/json)
+Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.
+    - Attributes (string)
+- Response 401 (application/json)
+Indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+    - Attributes (string)
+- Response 404 (application/json)
+Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+    - Attributes (string)
+- Response 500 (application/json)
+Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+    - Attributes (string)
+
+## Group Speeches
+
+### Speech [/speech/{itemIdentifier}]
+
+- Parameters
+    - itemIdentifier (string, required) - The reference of the speech in CRE2017
+
+- Attributes (object)
+    - eventIdentifier (string, required) - The identifier of the event in CRE2017 to which the speech belongs to
+    - debateIdentifier (string) - The identifier of the debate in CRE2017 to which the speech belongs to
+    - itemIdentifier (string, required) - The identifier of the speech in CRE2017
+    - indexNumber: 0545 (string) - The current index of the speech
+    - startTime: `2017-03-21T16:23:51,004` (string) - The start time of the speech
+    - endTime: `2017-03-21T16:25:16,687` (string) - The end time of the speech
+    - status: Exported (itemStatus) - The status of the speech
+    - speaker (person) - The person who pronounced the speech
+    - language: EN (language) - The language used by the speaker to pronounce the speech
+    - One Of
+        - continuationSpeechesIds (array[string]) - The list of speech identifiers that are the continuation of this multilingual intervention
+        - firstSpeechId (string) - The identifier of the first speech part of a multilingual intervention
+    - roles (translatedText) - The list of roles in which the speaker pronounces the speech
+    - chairPerson (person) - The person acting as chair during the speech
+    - chairLanguage: DE (language) - The language used by the chair
+    - videoDeliverable: true (boolean) - Indicates if the video can be published
+    - text (string) - The URL of the Word file in EPADES
+    - textURL (string) - [Speech Text]
+    - audio (string) - The URL of the audio file in EPADES
+    - audioURL (string) - [Speech Audio File]
+    - videoURL (string) - The URL of the video file in Europarl
+
+#### GET
+Returns the information about the desired speech
+
+- Response 200 (application/json)
+    - Attributes (Speech)
+- Response 400 (application/json)
+Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.
+    - Attributes (string)
+- Response 401 (application/json)
+Indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+    - Attributes (string)
+- Response 404 (application/json)
+Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+    - Attributes (string)
+- Response 500 (application/json)
+Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+    - Attributes (string)
+
+### Speech Audio File [/speech/{itemIdentifier}/audio]
+
+- Parameters
+    - itemIdentifier (string, required) - The reference of the speech in CRE2017
+
+#### GET
+Returns the desired speech audio file
+
+- Response 200 (audio/mpeg3)
+- Response 400 (application/json)
+Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.
+    - Attributes (string)
+- Response 404 (application/json)
+Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+    - Attributes (string)
+- Response 500 (application/json)
+Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+    - Attributes (string)
+
+### Speech Text [/speech/{itemIdentifier}/text]
+
+- Parameters
+    - itemIdentifier (string, required) - The reference of the speech in CRE2017
+
+#### GET
+Returns the desired speech word file
+
+- Response 200 (application/msword)
+- Response 400 (application/json)
+Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.
+    - Attributes (string)
+- Response 401 (application/json)
+Indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+    - Attributes (string)
+- Response 404 (application/json)
+Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+    - Attributes (string)
+- Response 500 (application/json)
+Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+    - Attributes (string)
+
+## Group Written Items
+
+### Written Item [/writtenItem/{itemIdentifier}]
+
+- Parameters
+    - itemIdentifier (string, required) - The reference of the written item in CRE2017
+
+- Attributes (object)
+    - eventIdentifier (string, required) - The identifier of the event in CRE2017 to which the speech belongs to
+    - debateIdentifier (string) - The identifier of the debate in CRE2017 to which the speech belongs to
+    - itemIdentifier (string, required) - The identifier of the written item in CRE2017
+    - indexNumber: 0545 (string) - The current index of the written item
+    - type: D (writtenItemType) - Written Statement or Written Explanation of Vote
+    - status: Exported (itemStatus) - The status of the speech
+    - language: EN (language) - The language used by the speaker to pronounce the speech
+    - authors (array[person]) - The authors who submitted the written item
+    - roles (array[translatedText]) - The list of roles in which the speaker pronounces the speech
+    - text (string) - The URL to the Word file in EPADES
+    - textURL (string) - [Written Item Text]
+
+#### GET
+Returns the information about the desired written item
+
+- Response 200 (application/json)
+    - Attributes (Written Item)
+- Response 400 (application/json)
+Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.
+    - Attributes (string)
+- Response 401 (application/json)
+Indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+    - Attributes (string)
+- Response 404 (application/json)
+Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+    - Attributes (string)
+- Response 500 (application/json)
+Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+    - Attributes (string)
+
+### Written Item Text [/writtenItem/{itemIdentifier}/text]
+
+- Parameters
+    - itemIdentifier (string, required) - The reference of the written item in CRE2017
+
+#### GET
+Returns the desired written item word file
+
+- Response 200 (application/msword)
+- Response 400 (application/json)
+Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.
+    - Attributes (string)
+- Response 401 (application/json)
+Indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+    - Attributes (string)
+- Response 404 (application/json)
+Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+    - Attributes (string)
+- Response 500 (application/json)
+Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+    - Attributes (string)
+
+### Submit a new Written Item [/writtenItem]
+
+#### POST
+Allows to submit new written items
+
+- Attributes (object)
+    - sessionDate (string) - The date of the plenary session to add written items to
+    - sittingDate (string) - The date of the plenary session sitting
+    - sessionLocation: STR (city) - The location of the sitting
+    - talkType (writtenItemType) - The type of written item, Written Statement or Explanation of Vote
+    - lang (language) - The language in which the written item is submitted
+    - text (string) - The text submitted
+    - ojIndex (string) - The index in the OJ of the debate where to insert the written item
+    - One Of
+        - enTitle (string) - The title in english of the debate where to insert the written item
+        - langTitle (string) - The title in the language of the submission of the debate where to insert the written item
+        - reportsReferences (array[string]) - The references of associated reports
+    - inputType (string) - Specifies if the text is submitted based on the title of the report or based on the reference
+    - mep (object) - The MEP who submits the text
+        - persId (number, required) - The codict persId
+        - name (string) - The name of the MEP
+        - eMail (string) - `The e-mail address of the MEP`
+
+- Request (application/json)
+
+- Response 200 (application/json)
+    - Attributes (object)
+        - result: OK (enum) - `request status`
+            - Members
+                - OK
+                - NOK
+- Response 400 (application/json)
+Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.
+    - Attributes (string)
+- Response 401 (application/json)
+Indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+    - Attributes (string)
+- Response 404 (application/json)
+Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+    - Attributes (string)
+- Response 500 (application/json)
+Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+    - Attributes (string)
+
+## Group Assemblies
+
+### Assembly [/assembly{?eventIdentifier,documentStage}]
+- Parameters
+    - eventIdentifier (string, required) - The reference of the event in CRE2017
+    - documentStage (documentStage, optional) - The status of the document to generate 
+
+#### GET
+Request a new assembly of the event.
+
+- Response 200 (application/json)
+    - Attributes (object)
+        - result: OK (enum)
+            - Members
+                - OK - The assembly has been generated correctly, the UBI is provided
+                - NOK - At least an item was not conform, the list of errors is provided
+        - One Of
+            - UBI: `eu.europa.europarl-ICI1-2014-0312009000_01.00-de-01.00_text-xml` (string) - The UBI of the cre xml stored in PureXML
+            - errors (array[assemblyError]) - The list of items at fault
+- Response 400 (application/json)
+Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.
+    - Attributes (string)
+- Response 401 (application/json)
+Indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+    - Attributes (string)
+- Response 404 (application/json)
+Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+    - Attributes (string)
+- Response 500 (application/json)
+Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+    - Attributes (string)
+
+## Group Xenat
+
+### Xenat Permission [/xenat/permission-request-v2{?ubi,operation,user}]
+
+- Parameters
+    - ubi: `eu.europa.europarl-ICI1-2014-0312009000_01.00-de-01.00_text-xml` (string) - Depending on the requested operation, UBI of the original cote if OPEN, UBI of the cote copy otherwise
+    - operation: START (enum) - The operation requested by the user
+        - Members
+            - OPEN - Open the document for display
+            - START - Request to Edit a fragment
+            - SAVE - Request to Save a fragment
+            - CANCEL - Cancel the editing of a fragment
+    - user (string) - Login of the user requesting the operation
+
+- Attributes (object)
+    - result: GRANTED (enum) - `The state of the request`
+        - Members
+            - GRANTED
+            - REFUSED
+            - ERROR
+    - One Of
+        - data (object)
+            - ubi: `eu.europa.europarl-ICI1-2014-0312009000_01.00-de-01.00_text-xml` (string) - The UBI of the original cote
+            - backURL: `http://www.creuidv.ep.parl.union.eu/creui/tree/event/11115888309` (string) - The URL to display the event
+            - debate (Debate) - The debate of the item
+            - fragments (array[fragment]) - The list of cote copies
+            - One Of
+                - speech (object)
+                    - selected (Speech)
+                    - previous (Speech)
+                    - next (Speech)
+                - writtenItem (Written Item)
+        - error (string) - Message provided in case of refused or error
+
+#### GET
+- Response 200 (application/json)
+    - Attributes (Xenat Permission)
+- Response 400 (application/json)
+Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.
+    - Attributes (string)
+- Response 401 (application/json)
+Indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+    - Attributes (string)
+- Response 404 (application/json)
+Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+    - Attributes (string)
+- Response 500 (application/json)
+Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+    - Attributes (string)
+
+## Data Structures
+
+### person (object)
+- persId: 125068 (number) - The codict persId
+- mepId: 6666 (number) - The codict mepId
+- lastNameLatin: Kefalogiannis (string) - The last name of the speaker in latin alphabet
+- firstNameLatin: Manolis (string) - The first name of the speaker in latin alphabet
+- lastNameNonLatin: Κεφαλογιάννης (string) - The last name of the speaker in non latin alphabet
+- firstNameNonLatin: Μανώλης (string) - The first name of the speaker in non latin alphabet
+- nonLatinAlphabet: EL (enum) - The alphabet in which the non latin family and first names are written
+    - Members
+        - BG - Bulgarian
+        - EL - Greek
+- gender: M (enum) - The gender of the speaker
+    - Members
+        - F - Female
+        - M - Male
+- motherTongue: EL (language) - The mother tongue of the speaker
+
+### translatedText (object)
+- language (language, required) - The language in which the text is provided
+- text (string, required) - The text in the specific language
+
+### assemblyError (object)
+- code (enum, required) - The type of fault
+    - Members
+        - MissingCodictId - At least one speaker missing or missing codictId
+        - MissingText - At least one item without text or empty text
+- itemIndex (string, required) - The index of the item
+
+### fragment (object)
+- ubi (string, required) - The ubi of the cote copy
+- order (number, required) - The order in which to display the copy
+- title (string, required) - The title of the tab
+
+### eventType (enum)
+- PLENARY - Plenary session sitting
+- CONFERENCE - Conference of presidents
+- `COMMISSIONER-HEARING` - Hearing of Commissioner
+- DIALOGUE - Monetary dialogue
+- `PUBLIC-HEARING` - Public hearing
+- OTHER - Other type of event
+
+### debateType (enum)
+- `HVO` - Voting Time
+- `NVO` - Sub debate of the Voting Time debate
+- `EXP_VOTE` - Explanation of Votes debate
+- `EXP` - Sub debate of the Explanation of Votes debate
+- `HUMAN_RIGHTS` - Debate or sub debate on human rights
+- `DE` - Generic Debate
+
+### writtenItemType (enum)
+- D - Written Statement
+- V - Explanation of Vote
+
+### itemStatus (enum)
+- Exported - Red Flag
+- Exported with Vocapia - Red Flag with a V
+- Ongoing Draft - Orange Flag
+- Ongoing Final - Orange Flag with Dashes
+- Finished - Green Flag
+- Validated - Blue Flag
+- Issue Raised - Black Flag
+- Done by DG PRES - Purple Flag
+
+### language (enum)
+- GA
+- BG
+- ES
+- CS
+- DA
+- DE
+- ET
+- EL
+- EN
+- FR
+- HR
+- IT
+- LV
+- LT
+- HU
+- MT
+- NL
+- PL
+- PT
+- RO
+- SK
+- SL
+- FI
+- SV
+
+### city (enum)
+- STR - Strasbourg
+- BRU - Brussels
+- LUX - Luxembourg
+
+### documentStage (enum)
+- DRAFT_PROVISIONAL - Draft Provisional
+- DRAFT_REVISED - Draft Revised
+- FINAL - Final
