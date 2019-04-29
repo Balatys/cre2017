@@ -14,8 +14,10 @@ They allow other systems of the European Parliament to retrieve information from
 
 - Attributes (object)
     - eventIdentifier (string, required) - The identifier of the event in CRE2017
+    - title (string, required) -
     - date: `2017-03-21` (string, required) - The date of the event
-    - place: STR (city) - The place where the event is held
+    - place: STR (city, required) - The place where the event is held
+    - room (string, required)
     - type: PLENARY (eventType, required) - The type of event
 
 #### GET
@@ -56,6 +58,9 @@ Indicates that the server encountered an unexpected condition that prevented it 
         - childrenDebateIds (array[string]) - `The list of sub-debates identifiers. Information available only for debates.`
     - title (array[translatedText]) - The title of the debate in all available translations
     - chairs (array[person]) - The list of persons holding the chair during the debate
+    - ojIndex (string) - The index of the agenda coming from SCHED
+    - procedureReferences (array[string]) - The list of procedure references discussed in the debate
+    - reportReferences (array[string]) - The list of report references discussed in the debate 
 
 #### GET
 Returns the information about the desired debate
@@ -123,25 +128,6 @@ Indicates that the origin server did not find a current representation for the t
 Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
     - Attributes (string)
 
-### Speech Audio File [/speech/{itemIdentifier}/audio]
-
-- Parameters
-    - itemIdentifier (string, required) - The reference of the speech in CRE2017
-
-#### GET
-Returns the desired speech audio file
-
-- Response 200 (audio/mpeg3)
-- Response 400 (application/json)
-Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.
-    - Attributes (string)
-- Response 404 (application/json)
-Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
-    - Attributes (string)
-- Response 500 (application/json)
-Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
-    - Attributes (string)
-
 ### Speech Text [/speech/{itemIdentifier}/text]
 
 - Parameters
@@ -156,6 +142,27 @@ Indicates that the server cannot or will not process the request because the rec
     - Attributes (string)
 - Response 401 (application/json)
 Indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+    - Attributes (string)
+- Response 404 (application/json)
+Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+    - Attributes (string)
+- Response 500 (application/json)
+Indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+    - Attributes (string)
+
+## Group Speech Audio
+
+### Speech Audio File [/speechaudio/{itemIdentifier}/audio]
+
+- Parameters
+    - itemIdentifier (string, required) - The reference of the speech in CRE2017
+
+#### GET
+Returns the desired speech audio file
+
+- Response 200 (audio/m4a)
+- Response 400 (application/json)
+Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.
     - Attributes (string)
 - Response 404 (application/json)
 Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
@@ -251,7 +258,7 @@ Allows to submit new written items
 
 - Response 200 (application/json)
     - Attributes (object)
-        - result: OK (enum) - `request status`
+        - result (enum) - `request status`
             - Members
                 - OK
                 - NOK
@@ -270,9 +277,10 @@ Indicates that the server encountered an unexpected condition that prevented it 
 
 ## Group Assemblies
 
-### Assembly [/assembly{?eventIdentifier,documentStage}]
+### Assembly [/assembly{?eventIdentifier,documentStage,username}]
 - Parameters
     - eventIdentifier (string, required) - The reference of the event in CRE2017
+    - username (string, required) - The user requesting the assembly
     - documentStage (documentStage, optional) - The status of the document to generate 
 
 #### GET
@@ -280,7 +288,7 @@ Request a new assembly of the event.
 
 - Response 200 (application/json)
     - Attributes (object)
-        - result: OK (enum)
+        - result (enum)
             - Members
                 - OK - The assembly has been generated correctly, the UBI is provided
                 - NOK - At least an item was not conform, the list of errors is provided
@@ -306,7 +314,7 @@ Indicates that the server encountered an unexpected condition that prevented it 
 
 - Parameters
     - ubi: `eu.europa.europarl-ICI1-2014-0312009000_01.00-de-01.00_text-xml` (string) - Depending on the requested operation, UBI of the original cote if OPEN, UBI of the cote copy otherwise
-    - operation: START (enum) - The operation requested by the user
+    - operation (enum) - The operation requested by the user
         - Members
             - OPEN - Open the document for display
             - START - Request to Edit a fragment
@@ -315,7 +323,7 @@ Indicates that the server encountered an unexpected condition that prevented it 
     - user (string) - Login of the user requesting the operation
 
 - Attributes (object)
-    - result: GRANTED (enum) - `The state of the request`
+    - result (enum) - `The state of the request`
         - Members
             - GRANTED
             - REFUSED
